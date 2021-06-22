@@ -273,4 +273,20 @@ public class ToolsSelenium {
 		return res;
 	}
 	
+	
+	public boolean judgeText(String testNo, String expactedValue, String actualValue) {
+		
+		boolean result = (expactedValue.equals(actualValue)) ? true : false;
+		
+		if (result) {
+			System.out.println("Success : Expected Value : ("+expactedValue+"), Actual Value : ("+actualValue+")");
+			screenShot(testNo+"_success");
+		} else { 
+			System.out.println("Error : Expected Value : ("+expactedValue+"), Actual Value : ("+actualValue+")");
+			screenShot(testNo+"_failure");
+		} 
+		
+		return result;
+	}
+	
 }

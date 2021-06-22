@@ -41,15 +41,7 @@ public class HIkariTvShop_02_OnePassRenew {
 		
 		String currentUrl = driver.getCurrentUrl();
 		
-		boolean result = (currentUrl.equals("https://shop.hikaritv.net/")) ? true : false;
-		
-		if (result) {
-			tool.screenShot("test_001_success");
-		} else {
-			tool.screenShot("test_001_failure");
-		}
-		
-		assertTrue("Failure Test 001", result);
+		assertTrue("Failure Test 001", tool.judgeText("test_001", "https://shop.hikaritv.net/", currentUrl));
 	}
 	
 
@@ -77,15 +69,41 @@ public class HIkariTvShop_02_OnePassRenew {
 		tool.waitElementXpath(xpathNicname, 5);
 		
 		String loadedNicname = driver.findElement(By.xpath(xpathNicname)).getText();
-		boolean result = (loadedNicname.equals(prop.getProperty("login.webid.nickname"))) ? true : false;
 		
-		if (result) {
-			tool.screenShot("test_002_success");
-		} else {
-			tool.screenShot("test_002_failure");
-		}
+		assertTrue("Failure Test 002", tool.judgeText("test_002", prop.getProperty("login.webid.nickname"), loadedNicname));
+	}
+	
+	
+	/**
+	 * 003 : search
+	 * @throws Exception
+	 */
+	@Test
+	public void test_003() throws Exception {
+		driver.findElement(By.id("searchText1")).click();
+		driver.findElement(By.id("searchText1")).clear();
 		
-		assertTrue("Failure Test 002", result);
+		String searchText = new String(prop.getProperty("search.commodity.no01").getBytes("UTF-8"), "UTF-8");
+		driver.findElement(By.id("searchText1")).sendKeys(searchText);
+		String inputedText = driver.findElement(By.id("searchText1")).getAttribute("value");
+
+		assertTrue("Failure Test 003", tool.judgeText("test_003", searchText, inputedText));
+	}
+	
+	
+	/**
+	 * 004 : search result
+	 * @throws Exception
+	 */
+	@Test
+	public void test_004() throws Exception {
+		driver.findElement(By.xpath("//div[@id='suggest0']/span")).click();
+		tool.screenShot("test_004_01_commoditypage");
+		
+		String searchText = new String(prop.getProperty("search.commodity.no01").getBytes("UTF-8"), "UTF-8");
+		String loadedText = driver.findElement(By.xpath("//*[@id=\"cart\"]/div/section/div[2]/div/h1")).getText();
+		
+		assertTrue("Failure Test 004", tool.judgeText("test_004", searchText, loadedText));
 	}
 	
 }
